@@ -7,10 +7,17 @@
 		"properties": {
 			"type": {
 				"type": "string",
-				"enum": [ "custom", "append_if_multiple" ]
+				"enum": [ "custom", "append_if_multiple" ],
+				"description": "The type of this rule\nCustom rules allow you to specify your own function to mutate the output\nAppend if multiple rules work like traditional FizzBuzz"
 			},
-			"name": { "type": "string" },
-			"divisor": { "type": "integer" }
+			"name": {
+				"type": "string",
+				"description": "Name of this rule\nThis is the filename without .js for custom rules, and the string to append for append if multiple"
+			},
+			"divisor": {
+				"type": "integer",
+				"description": "The integer a number must be divisible by in order to trigger this rule"
+			}
 		},
 		"defaultSnippets": [
 			{
