@@ -1,5 +1,5 @@
 {
-	"title": "FizzBuzz Rules",
+	"title": "FizzBuzz Tests",
 	"type": "array",
 	"items": {
 		"type": "object",

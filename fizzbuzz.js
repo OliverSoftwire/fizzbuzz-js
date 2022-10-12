@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { exit } = require("process");
 
 class Rule {
 	divisor = 1;
@@ -105,7 +106,7 @@ if (mode === "test") {
 		loadRules();
 	} catch (e) {
 		console.log("An error occured while loading rules:\n" + e);
-		return;
+		exit(1);
 	}
 
 	runTests();
@@ -114,7 +115,7 @@ if (mode === "test") {
 		loadRules();
 	} catch (e) {
 		console.log("An error occured while loading rules:\n" + e);
-		return;
+		exit(1);
 	}
 
 	fizzbuzz();
