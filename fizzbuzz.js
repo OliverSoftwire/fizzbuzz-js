@@ -1,7 +1,9 @@
 function fizzbuzz() {
 	console.log('Welcome to FizzBuzz!');
 
-	// Put your code here...
+	for (let number = 1; number <= 100; number++) {
+		console.log(number);
+	}
 }
 
 fizzbuzz();
