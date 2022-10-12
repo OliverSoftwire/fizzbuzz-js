@@ -1,0 +1,28 @@
+{
+	"title": "FizzBuzz Rules",
+	"type": "array",
+	"items": {
+		"type": "object",
+		"required": [ "type", "name", "divisor" ],
+		"properties": {
+			"type": {
+				"type": "string",
+				"enum": [ "custom", "append_if_multiple" ]
+			},
+			"name": { "type": "string" },
+			"divisor": { "type": "integer" }
+		},
+		"defaultSnippets": [
+			{
+				"label": "New custom rule",
+				"description": "Creates a new custom rule",
+				"body": { "type": "custom", "name": "$1", "divisor": "^$2" }
+			},
+			{
+				"label": "New append if multiple rule",
+				"description": "Creates a new append if multiple rule which automatically appends the name to the output if the number is divisible by the divisor",
+				"body": { "type": "custom", "name": "$1", "divisor": "^$2" }
+			}
+		]
+	}
+}
