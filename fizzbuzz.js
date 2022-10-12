@@ -29,7 +29,7 @@ const rules = [
 		outputArray[0] = "Bong";
 	}),
 	new Rule(13, (outputArray) => {
-		if (outputArray.length === 0) {
+		if (outputArray.length > 0) {
 			for (let i = 0; i < outputArray.length; i++) {
 				if (outputArray[i][0] !== "B") continue;
 	
