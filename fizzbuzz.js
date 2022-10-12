@@ -81,10 +81,13 @@ function runTests() {
 	console.log(`${numPasses}/${tests.length} tests passed (${Math.round(numPasses / tests.length * 100)}%)`);
 }
 
-const shouldRunTests = true; // Make this an option
+const commandLineArgs = process.argv.slice(2);
+const mode = commandLineArgs[0];
 
-if (shouldRunTests) {
+if (mode === "test") {
 	runTests();
-} else {
+} else if (mode === "run") {
 	fizzbuzz();
+} else {
+	console.log("Usage: node fizzbuzz.js test|run");
 }
