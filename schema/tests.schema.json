@@ -1,0 +1,25 @@
+{
+	"title": "FizzBuzz Rules",
+	"type": "array",
+	"items": {
+		"type": "object",
+		"required": [ "type", "name", "divisor" ],
+		"properties": {
+			"input": {
+				"type": "integer",
+				"description": "Number passed to applyRules"
+			},
+			"output": {
+				"type": "string",
+				"description": "Output that should be returned by applyRules"
+			}
+		},
+		"defaultSnippets": [
+			{
+				"label": "New test case",
+				"description": "Creates a new test case",
+				"body": { "input": "^$1", "output": "$2" }
+			}
+		]
+	}
+}

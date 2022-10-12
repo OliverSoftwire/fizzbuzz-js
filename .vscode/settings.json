@@ -4,7 +4,13 @@
 			"fileMatch": [
 				"/rules.json"
 			],
-			"url": "./rules.schema.json"
+			"url": "./schema/rules.schema.json"
+		},
+		{
+			"fileMatch": [
+				"/tests.json"
+			],
+			"url": "./schema/tests.schema.json"
 		}
 	]
 }
