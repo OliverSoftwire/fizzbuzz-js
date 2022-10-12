@@ -3,7 +3,7 @@
 	"type": "array",
 	"items": {
 		"type": "object",
-		"required": [ "type", "name", "divisor" ],
+		"required": [ "input", "output" ],
 		"properties": {
 			"input": {
 				"type": "integer",
