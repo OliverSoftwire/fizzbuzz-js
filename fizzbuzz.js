@@ -1,44 +1,57 @@
-const stack = [];
+class Rule {
+	divisor = 1;
+	applyFunc = () => { throw "Rule was not initialised!"; };
+
+	constructor(divisor, applyFunc) {
+		this.divisor = divisor;
+		this.applyFunc = applyFunc;
+	}
+
+	apply(outputArray, number) {
+		if (number % this.divisor === 0) {
+			this.applyFunc(outputArray);
+		}
+	}
+}
+
+class AppendIfMultiple extends Rule {
+	constructor(name, divisor) {
+		super(divisor, (outputArray) => { outputArray.push(name); });
+	}
+}
 
 const rules = [
-	[() => { stack.push("Fizz"); }, 3],
-	[() => { stack.push("Buzz"); }, 5],
-	[() => { stack.push("Bang"); }, 7],
-	[() => {
-		stack.length = 1;
-		stack[0] = "Bong";
-	}, 11],
-	[() => {
-		if (stack.length === 0) {
-			for (let i = 0; i < stack.length; i++) {
-				if (stack[i][0] !== "B") continue;
+	new AppendIfMultiple("Fizz", 3),
+	new AppendIfMultiple("Buzz", 5),
+	new AppendIfMultiple("Bang", 7),
+	new Rule(11, (outputArray) => {
+		outputArray.length = 1;
+		outputArray[0] = "Bong";
+	}),
+	new Rule(13, (outputArray) => {
+		if (outputArray.length === 0) {
+			for (let i = 0; i < outputArray.length; i++) {
+				if (outputArray[i][0] !== "B") continue;
 	
-				stack.splice(i + 1, 0, "Fezz");
+				outputArray.splice(i + 1, 0, "Fezz");
 				return;
 			}
 		}
 
-		stack.push("Fezz");
-	}, 13],
-	[() => { stack.reverse(); }, 17]
+		outputArray.push("Fezz");
+	}),
+	new Rule(17, (outputArray) => { outputArray.reverse(); })
 ];
 
 function fizzbuzz() {
 	console.log('Welcome to FizzBuzz!');
 
 	for (let number = 1; number <= 100; number++) {
-		output = "";
-		let shouldPrintNumber = true;
+		const output = [];
 
-		rules.forEach(rule => {
-			const [actionFunc, divisibleBy] = rule;
-			if (number % divisibleBy === 0) {
-				actionFunc();
-			}
-		});
+		rules.forEach(rule => { rule.apply(output, number); });
 
-		console.log(stack.length > 0 ? stack.join("") : number);
-		stack.length = 0;
+		console.log(output.length > 0 ? output.join("") : number);
 	}
 }
 
