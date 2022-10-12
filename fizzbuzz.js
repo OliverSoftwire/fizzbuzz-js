@@ -1,15 +1,17 @@
+const fs = require("fs");
+
 class Rule {
 	divisor = 1;
-	applyFunc = () => { throw "Rule was not initialised!"; };
+	action = () => { throw "Rule was not initialised!"; };
 
-	constructor(divisor, applyFunc) {
+	constructor(divisor, action) {
 		this.divisor = divisor;
-		this.applyFunc = applyFunc;
+		this.action = action;
 	}
 
 	apply(outputArray, number) {
 		if (number % this.divisor === 0) {
-			this.applyFunc(outputArray);
+			this.action(outputArray);
 		}
 	}
 }
@@ -20,28 +22,43 @@ class AppendIfMultiple extends Rule {
 	}
 }
 
-const rules = [
-	new AppendIfMultiple("Fizz", 3),
-	new AppendIfMultiple("Buzz", 5),
-	new AppendIfMultiple("Bang", 7),
-	new Rule(11, (outputArray) => {
-		outputArray.length = 1;
-		outputArray[0] = "Bong";
-	}),
-	new Rule(13, (outputArray) => {
-		if (outputArray.length > 0) {
-			for (let i = 0; i < outputArray.length; i++) {
-				if (outputArray[i][0] !== "B") continue;
-	
-				outputArray.splice(i, 0, "Fezz");
-				return;
-			}
+const rules = [];
+
+function loadRules() {
+	const rawJsonData = fs.readFileSync("rules.json");
+	const rulesJson = JSON.parse(rawJsonData);
+
+	rulesJson.forEach(rule => {
+		if (!rule.hasOwnProperty("divisor")) {
+			throw "Invalid rule in rules.json (missing divisor)";
+		}
+		if (!rule.hasOwnProperty("name")) {
+			throw "Invalid rule in rules.json (missing name)";
 		}
 
-		outputArray.push("Fezz");
-	}),
-	new Rule(17, (outputArray) => { outputArray.reverse(); })
-];
+		switch (rule.type) {
+			case "custom":
+				let userScript;
+				try {
+					userScript = require("./rules/" + rule.name);
+				} catch {
+					throw "Invalid custom rule in rules.json (failed to import script)";
+				}
+
+				if (!("action" in userScript)) {
+					throw "Custom rule script is missing action function (make sure to set exports.action!)";
+				}
+
+				rules.push(new Rule(rule.divisor, userScript.action));
+				break;
+			case "append_if_multiple":
+				rules.push(new AppendIfMultiple(rule.name, rule.divisor));
+				break;
+			default:
+				throw "Invalid rule in rules.json (missing or unknown type)";
+		}
+	})
+}
 
 function applyRules(number) {
 	const output = [];
@@ -59,7 +76,6 @@ function fizzbuzz() {
 }
 
 function runTests() {
-	const fs = require("fs");
 	const rawJsonData = fs.readFileSync("tests.json");
 
 	const tests = JSON.parse(rawJsonData);
@@ -85,8 +101,22 @@ const commandLineArgs = process.argv.slice(2);
 const mode = commandLineArgs[0];
 
 if (mode === "test") {
+	try {
+		loadRules();
+	} catch (e) {
+		console.log("An error occured while loading rules:\n" + e);
+		return;
+	}
+
 	runTests();
 } else if (mode === "run") {
+	try {
+		loadRules();
+	} catch (e) {
+		console.log("An error occured while loading rules:\n" + e);
+		return;
+	}
+
 	fizzbuzz();
 } else {
 	console.log("Usage: node fizzbuzz.js test|run");

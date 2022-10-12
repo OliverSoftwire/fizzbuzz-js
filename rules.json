@@ -1,0 +1,8 @@
+[
+	{ "type": "append_if_multiple", "name": "Fizz", "divisor": 3 },
+	{ "type": "append_if_multiple", "name": "Buzz", "divisor": 5 },
+	{ "type": "append_if_multiple", "name": "Bang", "divisor": 7 },
+	{ "type": "custom", "name": "Bong", "divisor": 11 },
+	{ "type": "custom", "name": "Fezz","divisor": 13 },
+	{ "type": "custom", "name": "Reverse", "divisor": 17 }
+]
