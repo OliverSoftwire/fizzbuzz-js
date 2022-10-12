@@ -33,7 +33,7 @@ const rules = [
 			for (let i = 0; i < outputArray.length; i++) {
 				if (outputArray[i][0] !== "B") continue;
 	
-				outputArray.splice(i + 1, 0, "Fezz");
+				outputArray.splice(i, 0, "Fezz");
 				return;
 			}
 		}
@@ -43,16 +43,48 @@ const rules = [
 	new Rule(17, (outputArray) => { outputArray.reverse(); })
 ];
 
+function applyRules(number) {
+	const output = [];
+	rules.forEach(rule => { rule.apply(output, number); });
+
+	return output.length > 0 ? output.join("") : number.toString();
+}
+
 function fizzbuzz() {
 	console.log('Welcome to FizzBuzz!');
 
 	for (let number = 1; number <= 100; number++) {
-		const output = [];
-
-		rules.forEach(rule => { rule.apply(output, number); });
-
-		console.log(output.length > 0 ? output.join("") : number);
+		console.log(applyRules(number));
 	}
 }
 
-fizzbuzz();
+function runTests() {
+	const fs = require("fs");
+	const rawJsonData = fs.readFileSync("tests.json");
+
+	const tests = JSON.parse(rawJsonData);
+	let numPasses = 0;
+
+	console.log(`Running ${tests.length} tests...`);
+
+	tests.forEach(test => {
+		const result = applyRules(test.input);
+
+		const passed = result == test.output;
+		if (passed) {
+			numPasses++;
+		}
+
+		console.log(`Input: ${test.input} | Expected Output: ${test.output} | Actual Output: ${result} => ${passed ? "Passed!" : "Failed"}`);
+	})
+
+	console.log(`${numPasses}/${tests.length} tests passed (${Math.round(numPasses / tests.length * 100)}%)`);
+}
+
+const shouldRunTests = true; // Make this an option
+
+if (shouldRunTests) {
+	runTests();
+} else {
+	fizzbuzz();
+}
